@@ -1,0 +1,38 @@
+<h2>Pokédex</h2>
+
+<h3 class="h6">Tipi di Pokémon</h3>
+<div class="mb-3">
+  @for (t of tipi(); track t.name) {
+    <span class="badge text-bg-secondary me-1">{{ t.name }}</span>
+  }
+</div>
+
+<div class="row g-2 mb-3">
+  <div class="col-auto">
+    <input #nome type="search" class="form-control" placeholder="pikachu oppure 25" aria-label="Nome o numero del Pokémon" />
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-primary" (click)="cerca(nome.value)" [disabled]="loading()">Cerca</button>
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="spinner-border text-primary mb-3" role="status"></div>
+}
+
+@if (errore()) {
+  <div class="alert alert-danger">{{ errore() }}</div>
+}
+
+@if (pokemon(); as p) {
+  <div class="card" style="max-width: 20rem">
+    @if (p.sprites.front_default) {
+      <img [src]="p.sprites.front_default" [alt]="p.name" class="card-img-top" />
+    }
+    <div class="card-body">
+      <h3 class="card-title h5 text-capitalize">{{ p.name }}</h3>
+      <p class="mb-1">Altezza: {{ p.height / 10 }} m</p>
+      <p class="mb-0">Peso: {{ p.weight / 10 }} kg</p>
+    </div>
+  </div>
+}

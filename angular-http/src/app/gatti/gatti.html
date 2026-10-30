@@ -1,0 +1,23 @@
+<h2>Fatti sui gatti</h2>
+<p class="text-body-secondary">Ogni fatto arriva da una nuova richiesta a catfact.ninja.</p>
+
+<button type="button" class="btn btn-primary mb-3" [disabled]="loading()" (click)="nuovoFatto()">
+  @if (loading()) {
+    <span class="spinner-border spinner-border-sm me-2" role="status"></span>Caricamento...
+  } @else {
+    Nuovo fatto
+  }
+</button>
+
+@if (errore()) {
+  <div class="alert alert-danger">{{ errore() }}</div>
+}
+
+@if (fatto(); as f) {
+  <div class="card">
+    <div class="card-body">
+      <p class="card-text fs-5">{{ f.fact }}</p>
+      <p class="card-text mb-0"><small class="text-body-secondary">{{ f.length }} caratteri</small></p>
+    </div>
+  </div>
+}

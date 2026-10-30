@@ -1,0 +1,52 @@
+<h2>Post da JSONPlaceholder</h2>
+
+<div class="row g-2 mb-3">
+  <div class="col-auto">
+    <input #numero type="number" class="form-control" value="1" min="1" aria-label="Numero del post" />
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-primary" (click)="caricaUno(numero.value)">Carica un post</button>
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-outline-primary" (click)="caricaTutti()">Carica tutti</button>
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-success" (click)="invia()">Invia un post</button>
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="spinner-border text-primary mb-3" role="status"></div>
+}
+
+@if (errore()) {
+  <div class="alert alert-danger">{{ errore() }}</div>
+}
+
+@if (post(); as p) {
+  <h3 class="h5">Ultima risposta ricevuta (post n. {{ p.id }})</h3>
+  <pre class="bg-body-tertiary p-3 rounded">{{ p | json }}</pre>
+}
+
+<h3 class="h5">Post a pagine (Prova tu, livello 1)</h3>
+<div class="d-flex align-items-center gap-3 mb-3">
+  <button type="button" class="btn btn-outline-secondary" [disabled]="loading() || pagina() <= primaPagina" (click)="precedente()">
+    Precedente
+  </button>
+  <span>Pagina {{ pagina() }} di {{ ultimaPagina }}</span>
+  <button type="button" class="btn btn-outline-secondary" [disabled]="loading() || pagina() >= ultimaPagina" (click)="successiva()">
+    Successiva
+  </button>
+</div>
+
+@if (posts().length > 0) {
+  <h3 class="h5">Tutti i post: {{ posts().length }}</h3>
+  <div class="list-group">
+    @for (p of posts(); track p.id) {
+      <div class="list-group-item">
+        <h4 class="h6 mb-1">{{ p.id }}. {{ p.title }}</h4>
+        <p class="mb-0 small text-body-secondary">{{ p.body }}</p>
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,59 @@
+<h2>Astronomy Picture of the Day (NASA)</h2>
+<p class="text-body-secondary">
+  La chiave API arriva dai file di ambiente, che non sono nel repository. Se manca o non è valida il
+  server risponde 403 Forbidden.
+</p>
+
+<div class="row g-2 align-items-center mb-3">
+  <div class="col-auto">
+    <button type="button" class="btn btn-primary" [disabled]="loading()" (click)="caricaOggi()">
+      @if (loading()) {
+        <span class="spinner-border spinner-border-sm me-2" role="status"></span>Caricamento...
+      } @else {
+        APOD di oggi
+      }
+    </button>
+  </div>
+  <div class="col-auto">
+    <input #giorno type="date" class="form-control" aria-label="Giorno dell'APOD" />
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-outline-primary" [disabled]="loading()" (click)="caricaDel(giorno.value)">
+      Mostra
+    </button>
+  </div>
+</div>
+
+<p class="text-body-secondary small">
+  Prova tu (livello 3): con una data futura la NASA risponde <strong>400 Bad Request</strong>
+  ("Date must be between Jun 16, 1995 and oggi").
+</p>
+
+@if (errore()) {
+  <div class="alert alert-warning">{{ errore() }}</div>
+}
+
+@if (apod(); as a) {
+  <div class="card">
+    @if (a.media_type === 'image') {
+      <img [src]="a.url" [alt]="a.title" class="card-img-top" />
+    } @else {
+      <div class="card-body">
+        <p class="mb-2">L'APOD di oggi è un video, non un'immagine:</p>
+        <a [href]="a.url" target="_blank" rel="noopener" class="btn btn-outline-secondary">
+          Apri il video in una nuova scheda
+        </a>
+      </div>
+    }
+    <div class="card-body">
+      <h3 class="card-title h5">{{ a.title }}</h3>
+      <p class="card-text mb-2">
+        <small class="text-body-secondary">{{ a.date }}</small>
+        @if (a.copyright) {
+          <small class="text-body-secondary"> — © {{ a.copyright }}</small>
+        }
+      </p>
+      <p class="card-text">{{ a.explanation }}</p>
+    </div>
+  </div>
+}
